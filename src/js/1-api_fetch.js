@@ -32,14 +32,15 @@ function search() {
 submitButton.addEventListener('click', search);
 
 // -------------------------SEARCH RESULTS------------------------------------------
+const showList = document.querySelector('.js-searchList');
 function showURL(result) {
+	showList.innerHTML = '';
 	if (!result.success) {
 		for (const resultShow of result) {
 			const showItem = document.createElement('li');
 			showItem.classList.add('show-item');
 			showItem.addEventListener('click', selectFav);
 			const showImage = document.createElement('img');
-			const showList = document.querySelector('.js-searchList');
 			const showNameContainer = document.createElement('h3');
 			const showName = document.createTextNode(resultShow.show.name);
 			if (resultShow.show.image === null) {
@@ -58,16 +59,30 @@ function showURL(result) {
 	}
 }
 
-// -------------------------SELCT FAV------------------------------------------
+// -------------------------SELECT FAV------------------------------------------
 const favItems = [];
 const favList = document.querySelector('.js-favs');
 
 function selectFav(event) {
 	favItems.push(event.currentTarget.innerHTML);
 	console.log(favItems.length);
-	const favListItem = document.createElement('li');
-	favListItem.classList.add('fav-item');
-	// favListItem.addEventListener('click', removeFav);
+	paintFav();
+}
 
-	favList.innerHTML += favItems[favItems.length - 1];
+function paintFav() {
+	const favListItem = document.createElement('li');
+	favListItem.addEventListener('click', removeFav);
+	favListItem.innerHTML += favItems[favItems.length - 1];
+	favListItem.classList.add(favItems.length - 1);
+	favList.appendChild(favListItem);
+}
+
+// -------------------------REMOVE FAV------------------------------------------
+function removeFav(event) {
+	console.log(event.currentTarget.classList[0]);
+	const favItemPosition = parseInt(event.currentTarget.classList[0]);
+	console.log(favItemPosition);
+	console.log(favItems);
+	favList.removeChild(event.currentTarget);
+	favItems.splice(favItemPosition, 1);
 }
