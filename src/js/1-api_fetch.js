@@ -62,12 +62,12 @@ function showURL(result) {
 const favItems = [];
 const favList = document.querySelector('.js-favs');
 
-function selectFav() {
+function selectFav(event) {
 	favItems.push(event.currentTarget.innerHTML);
+	console.log(favItems.length);
 	const favListItem = document.createElement('li');
 	favListItem.classList.add('fav-item');
 	// favListItem.addEventListener('click', removeFav);
-	for (const favItem of favItems) {
-		favList.innerHTML += favItem;
-	}
+
+	favList.innerHTML += favItems[favItems.length - 1];
 }
