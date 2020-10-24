@@ -36,8 +36,11 @@ function showURL(result) {
 	if (!result.success) {
 		for (const resultShow of result) {
 			const showItem = document.createElement('li');
+			showItem.classList.add('show-item');
+			showItem.addEventListener('click', selectFav);
 			const showImage = document.createElement('img');
 			const showList = document.querySelector('.js-searchList');
+			const showNameContainer = document.createElement('h3');
 			const showName = document.createTextNode(resultShow.show.name);
 			if (resultShow.show.image === null) {
 				showImage.src =
@@ -46,11 +49,25 @@ function showURL(result) {
 				showImage.src = resultShow.show.image.medium;
 			}
 			showItem.appendChild(showImage);
-			showItem.appendChild(showName);
+			showNameContainer.appendChild(showName);
+			showItem.appendChild(showNameContainer);
 			showList.appendChild(showItem);
 		}
 	} else {
-		console.log('else');
 		errorMessage.innerHTML = `Parece que ha habído un problema al buscar tu serie </p> <p class="error-text">${result.error}`;
+	}
+}
+
+// -------------------------SELCT FAV------------------------------------------
+const favItems = [];
+const favList = document.querySelector('.js-favs');
+
+function selectFav() {
+	favItems.push(event.currentTarget.innerHTML);
+	const favListItem = document.createElement('li');
+	favListItem.classList.add('fav-item');
+	// favListItem.addEventListener('click', removeFav);
+	for (const favItem of favItems) {
+		favList.innerHTML += favItem;
 	}
 }
