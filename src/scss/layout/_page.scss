@@ -14,21 +14,11 @@ body {
 	width: 100%;
 }
 
-.side {
-	width: 25%;
-	height: calc(100vh - 78.4px);
-	background-color: lightcoral;
-
-	.search {
-		text-align: center;
-		color: midnightblue;
-		background-color: ivory;
-		padding: 20px 0;
-		border-top: 4px solid midnightblue;
-	}
-}
-
-.searchList {
+.main {
 	width: 75%;
 	background-color: darkorange;
+	.fetch-error {
+		position: relative;
+		left: 25%;
+	}
 }

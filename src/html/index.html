@@ -14,26 +14,12 @@
 
 	<body>
 		<h1 class="title">Buscador de series</h1>
-		<div class="side">
-			<form action="" method="GET" class="search js-search">
-				<label for="search-text">¿Qué serie quieres buscar?</label>
-				<input
-					id="search-text"
-					class="js-search-text search-text"
-					type="text"
-				/>
-				<input
-					type="submit"
-					class="search-submit js-search-button"
-					value="Buscar"
-				/>
-			</form>
-			<h2 class="favTitle">Tus series favoritas</h2>
-			<ul class="favs js-fav-list"></ul>
-		</div>
-		<ul class="searchList js-search-list">
+		<include src="./partials/side.html"></include>
+		<div class="main">
 			<p class="fetch-error"></p>
-		</ul>
+			<ul class="searchList js-search-list"></ul>
+		</div>
+
 		<script src="./assets/js/main.js"></script>
 	</body>
 </html>
