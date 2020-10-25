@@ -5,9 +5,10 @@ const searchButton = document.querySelector('.js-search-button');
 const searchText = document.querySelector('.js-search-text');
 const showList = document.querySelector('.js-search-list');
 const favList = document.querySelector('.js-fav-list');
-let showListItems;
-
 const errorMessage = document.querySelector('.fetch-error');
+
+let showListItems;
+let favIndex;
 
 //  --- ARRAYS ---
 let favs = [];
@@ -27,7 +28,6 @@ function searchShows() {
 		})
 		.catch(function (error) {
 			errorMessage.innerHTML = `Parece que hay problemas para conectar con el servidor. ${error}`;
-			console.error(error);
 		});
 }
 
@@ -39,7 +39,6 @@ function writeShows(result) {
 	shows = [];
 	for (const show of result) {
 		shows.push(show);
-		console.log(shows);
 	}
 	printShows();
 }
@@ -112,9 +111,7 @@ function selectFav(event) {
 	if (favRepeated) {
 		favs.pop();
 	}
-	for (const fav of favs) {
-		console.log(fav.show.name);
-	}
+
 	printFavs();
 	storeData();
 }
@@ -124,6 +121,7 @@ function selectFav(event) {
 function printFavs() {
 	favList.innerHTML = '';
 	if (favs !== null) {
+		favIndex = 0;
 		for (const fav of favs) {
 			printFav(fav);
 		}
@@ -145,7 +143,8 @@ function printFav(fav) {
 
 	let article = document.createElement('article');
 	article.classList.add('side__favs--list-item');
-	article.dataset.index = favs.length - 1;
+	article.dataset.index = favIndex;
+	favIndex = favIndex + 1;
 
 	article.appendChild(favImage);
 	li.appendChild(article);
@@ -158,7 +157,7 @@ function printFav(fav) {
 	article.addEventListener('click', removeFav);
 }
 
-//  --- REMOVE FAVS ---
+//  --- PAINT SELECTED ---
 
 function selected() {
 	let index;
@@ -172,79 +171,19 @@ function selected() {
 	}
 }
 
-function removeFav(event) {
-	let indexFav = event.currentTarget.dataset.index;
-	let indexShow;
+//  --- REMOVE FAVS ---
 
+function removeFav(event) {
+	const indexFav = event.currentTarget.dataset.index;
+	let indexShow;
 	for (indexShow = 0; indexShow < shows.length; indexShow++) {
 		if (favs[indexFav].show.id === shows[indexShow].show.id) {
 			showListItems[indexShow].classList.remove('fav');
 		}
 	}
-
 	favs.splice(indexFav, 1);
 	printFavs();
 }
-
-function removeShow(event) {
-	let indexFav;
-	let indexShow = event.currentTarget.dataset.index;
-
-	for (indexFav = 0; indexFav < favs.length; indexFav++) {
-		if (favs[indexFav].show.id === shows[indexShow].show.id) {
-			showListItems[indexShow].classList.remove('fav');
-			favs.splice(indexFav, 1);
-		}
-	}
-	printFavs();
-}
-
-// function removeFav(event) {
-// 	const index = event.currentTarget.dataset.index;
-// 	console.log(index);
-// 	let i;
-
-// 	if (showListItems !== undefined) {
-// 		for (i = 0; i < showListItems.length; i++) {
-// 			console.log('vuelta numero ' + i);
-// 			console.log(favs[index]);
-// 			console.log(shows[i]);
-// 			if (favs[index].show.id === shows[i].show.id) {
-// 				console.log('dentro if' + showListItems[i]);
-// 				showListItems[i].classList.remove('fav');
-// 				favs.splice(index, 1);
-// 				i = showListItems.length;
-
-// 				console.log(favs);
-// 			}
-// 		}
-// 	}
-// 	favs.splice(index, 1);
-// 	storeData();
-// 	printFavs();
-// }
-
-// function removeFav(event) {
-// 	const id = parseInt(event.currentTarget.dataset.id);
-// 	removingFav(id);
-// }
-// function removingFav(id) {
-// 	storeData();
-// 	const favsItems = document.querySelectorAll('.js-favs-item');
-// 	for (const favItem of favsItems) {
-// 		if (id === parseInt(favItem.id)) {
-// 			favItem.remove();
-// 		}
-// 	}
-// 	printFavs();
-
-// 	const showsItems = document.querySelectorAll('.js-shows-item');
-// 	for (const showsItem of showsItems) {
-// 		if (id === parseInt(showsItem.id)) {
-// 			showsItem.classList.remove('fav');
-// 		}
-// 	}
-// }
 
 //  --- LOCAL STORAGE ---
 function storeData() {
@@ -260,7 +199,5 @@ function getStorage() {
 	}
 	printFavs();
 }
-
-//  --- REMEMBER FAV SHOWS ---
 
 getStorage();
