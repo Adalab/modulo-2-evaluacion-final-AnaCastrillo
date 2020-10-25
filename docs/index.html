@@ -15,17 +15,31 @@
 	<body>
 		<h1 class="title">Buscador de series</h1>
 		<div class="side">
-			<form action="" method="GET" class="search js-form">
-				<label for="search-text">¿Qué serie quieres buscar?</label>
-				<input id="search-text" class="search-text" type="text" />
-				<input type="submit" class="search-submit" value="Buscar" />
+			<form action="" method="GET" class="side__search js-search">
+				<label for="search-text">
+					<h2 class="side__search--title">¿Qué serie quieres buscar?</h2>
+				</label>
+				<input
+					id="search-text"
+					class="side__search--text js-search-text"
+					type="text"
+				/>
+				<input
+					type="submit"
+					class="side__search--submit js-search-button"
+					value="Buscar"
+				/>
 			</form>
+
 			<h2 class="favTitle">Tus series favoritas</h2>
-			<ul class="favs js-favs"></ul>
+			<ul class="side__favs js-fav-list"></ul>
 		</div>
-		<ul class="searchList js-searchList">
+
+		<div class="main">
 			<p class="fetch-error"></p>
-		</ul>
+			<ul class="searchList js-search-list"></ul>
+		</div>
+
 		<script src="./assets/js/main.js"></script>
 	</body>
 </html>
