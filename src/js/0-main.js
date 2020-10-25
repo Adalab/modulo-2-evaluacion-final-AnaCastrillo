@@ -9,12 +9,10 @@ const favList = document.querySelector('.js-fav-list');
 const errorMessage = document.querySelector('.fetch-error');
 
 //  --- ARRAYS ---
-
-let shows = [];
 let favs = [];
+let shows = [];
 
 console.log(shows);
-console.log(favs);
 
 //  --- API FETCH ---
 function searchShows() {
@@ -38,6 +36,7 @@ searchButton.addEventListener('click', searchShows);
 //  --- SAVE SHOWS IN ARRAY ---
 
 function writeShows(result) {
+	console.log(shows);
 	shows = [];
 	for (const show of result) {
 		shows.push(show);
@@ -89,9 +88,9 @@ function printShows() {
 }
 
 //  --- SELECT FAV ---
-function findNewFav() {
-	return fav.show.id === newFav.show.id;
-}
+// function findNewFav() {
+// 	return fav.show.id === newFav.show.id;
+// }
 
 function selectFav(event) {
 	event.currentTarget.classList.add('fav');
@@ -101,14 +100,18 @@ function selectFav(event) {
 	let favRepeated = false;
 
 	let i;
-	console.log(favs);
-	for (i = 0; i < favs.length; i++) {
-		if (shows[index].show.id === favs[i].show.id) {
-			console.log(favs[i]);
-			favs.splice(i, 1);
-			favRepeated = true;
+	if (favs !== null) {
+		for (i = 0; i < favs.length; i++) {
+			if (shows[index].show.id === favs[i].show.id) {
+				console.log(favs[i]);
+				favs.splice(i, 1);
+				favRepeated = true;
+			}
 		}
 	}
+	console.log('hola');
+	console.log(newFav);
+	console.log(favs);
 	favs.push(newFav);
 
 	if (favRepeated) {
@@ -157,15 +160,56 @@ function printFav(fav) {
 	favName.classList.add('fav-name', 'js-favorites-name');
 	favName.appendChild(document.createTextNode(fav.show.name));
 	article.appendChild(favName);
+
+	// article.addEventListener('click', removeFav);
 }
+
+// //  --- REMOVE FAVS ---
+// function removeFav(event) {
+// 	const id = parseInt(event.currentTarget.dataset.id);
+// 	removingFav(id);
+// }
+
+// function removingFav(id) {
+// 	function findFav(fav) {
+// 		fav.show.id === id;
+// 	}
+// 	const notFav = favs.findIndex(findFav);
+// 	console.log(notFav);
+// 	favs.splice(notFav, 1);
+// 	// storeData();
+// 	const favsItems = document.querySelectorAll('.js-favs-item');
+// 	for (const favItem of favsItems) {
+// 		if (id === parseInt(favItem.id)) {
+// 			favItem.remove();
+// 		}
+// 	}
+// 	printFavs();
+
+// 	const showsItems = document.querySelectorAll('.js-shows-item');
+// 	for (const showsItem of showsItems) {
+// 		if (id === parseInt(showsItem.id)) {
+// 			console.log('deleting');
+// 			showsItem.classList.remove('fav');
+// 		}
+// 	}
+// }
 
 //  --- LOCAL STORAGE ---
 function storeData() {
-	localStorage.setItem('favs', JSON.stringify(favs));
+	console.log('guardo');
+	const jsonFavs = JSON.stringify(favs);
+	localStorage.setItem('favs', jsonFavs);
 }
 
 function getStorage() {
-	favs = JSON.parse(localStorage.getItem('favs'));
+	const storedFavs = localStorage.getItem('favs');
+	const lastFavs = JSON.parse(storedFavs);
+	if (lastFavs !== null) {
+		favs = lastFavs;
+	}
+	console.log('store' + favs);
 	printFavs();
 }
+
 getStorage();
