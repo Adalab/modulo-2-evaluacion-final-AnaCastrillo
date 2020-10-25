@@ -5,14 +5,13 @@ const searchButton = document.querySelector('.js-search-button');
 const searchText = document.querySelector('.js-search-text');
 const showList = document.querySelector('.js-search-list');
 const favList = document.querySelector('.js-fav-list');
+let showListItems;
 
 const errorMessage = document.querySelector('.fetch-error');
 
 //  --- ARRAYS ---
 let favs = [];
 let shows = [];
-
-console.log(shows);
 
 //  --- API FETCH ---
 function searchShows() {
@@ -28,6 +27,7 @@ function searchShows() {
 		})
 		.catch(function (error) {
 			errorMessage.innerHTML = `Parece que hay problemas para conectar con el servidor. ${error}`;
+			console.error(error);
 		});
 }
 
@@ -36,10 +36,10 @@ searchButton.addEventListener('click', searchShows);
 //  --- SAVE SHOWS IN ARRAY ---
 
 function writeShows(result) {
-	console.log(shows);
 	shows = [];
 	for (const show of result) {
 		shows.push(show);
+		console.log(shows);
 	}
 	printShows();
 }
@@ -83,35 +83,30 @@ function printShows() {
 			article.appendChild(showName);
 
 			article.addEventListener('click', selectFav);
+			showListItems = document.querySelectorAll('.js-shows-item');
 		}
+		selected();
 	}
 }
 
 //  --- SELECT FAV ---
-// function findNewFav() {
-// 	return fav.show.id === newFav.show.id;
-// }
 
 function selectFav(event) {
 	event.currentTarget.classList.add('fav');
 	const index = event.currentTarget.dataset.index;
 	const newFav = shows[index];
-
 	let favRepeated = false;
-
-	let i;
 	if (favs !== null) {
+		let i;
+
 		for (i = 0; i < favs.length; i++) {
 			if (shows[index].show.id === favs[i].show.id) {
-				console.log(favs[i]);
+				event.currentTarget.classList.remove('fav');
 				favs.splice(i, 1);
 				favRepeated = true;
 			}
 		}
 	}
-	console.log('hola');
-	console.log(newFav);
-	console.log(favs);
 	favs.push(newFav);
 
 	if (favRepeated) {
@@ -120,7 +115,6 @@ function selectFav(event) {
 	for (const fav of favs) {
 		console.log(fav.show.name);
 	}
-	console.log(favs);
 	printFavs();
 	storeData();
 }
@@ -161,23 +155,81 @@ function printFav(fav) {
 	favName.appendChild(document.createTextNode(fav.show.name));
 	article.appendChild(favName);
 
-	// article.addEventListener('click', removeFav);
+	article.addEventListener('click', removeFav);
 }
 
-// //  --- REMOVE FAVS ---
+//  --- REMOVE FAVS ---
+
+function selected() {
+	let index;
+	let i;
+	for (index = 0; index < favs.length; index++) {
+		for (i = 0; i < shows.length; i++) {
+			if (favs[index].show.id === shows[i].show.id) {
+				showListItems[i].classList.add('fav');
+			}
+		}
+	}
+}
+
+function removeFav(event) {
+	let indexFav = event.currentTarget.dataset.index;
+	let indexShow;
+
+	for (indexShow = 0; indexShow < shows.length; indexShow++) {
+		if (favs[indexFav].show.id === shows[indexShow].show.id) {
+			showListItems[indexShow].classList.remove('fav');
+		}
+	}
+
+	favs.splice(indexFav, 1);
+	printFavs();
+}
+
+function removeShow(event) {
+	let indexFav;
+	let indexShow = event.currentTarget.dataset.index;
+
+	for (indexFav = 0; indexFav < favs.length; indexFav++) {
+		if (favs[indexFav].show.id === shows[indexShow].show.id) {
+			showListItems[indexShow].classList.remove('fav');
+			favs.splice(indexFav, 1);
+		}
+	}
+	printFavs();
+}
+
+// function removeFav(event) {
+// 	const index = event.currentTarget.dataset.index;
+// 	console.log(index);
+// 	let i;
+
+// 	if (showListItems !== undefined) {
+// 		for (i = 0; i < showListItems.length; i++) {
+// 			console.log('vuelta numero ' + i);
+// 			console.log(favs[index]);
+// 			console.log(shows[i]);
+// 			if (favs[index].show.id === shows[i].show.id) {
+// 				console.log('dentro if' + showListItems[i]);
+// 				showListItems[i].classList.remove('fav');
+// 				favs.splice(index, 1);
+// 				i = showListItems.length;
+
+// 				console.log(favs);
+// 			}
+// 		}
+// 	}
+// 	favs.splice(index, 1);
+// 	storeData();
+// 	printFavs();
+// }
+
 // function removeFav(event) {
 // 	const id = parseInt(event.currentTarget.dataset.id);
 // 	removingFav(id);
 // }
-
 // function removingFav(id) {
-// 	function findFav(fav) {
-// 		fav.show.id === id;
-// 	}
-// 	const notFav = favs.findIndex(findFav);
-// 	console.log(notFav);
-// 	favs.splice(notFav, 1);
-// 	// storeData();
+// 	storeData();
 // 	const favsItems = document.querySelectorAll('.js-favs-item');
 // 	for (const favItem of favsItems) {
 // 		if (id === parseInt(favItem.id)) {
@@ -189,7 +241,6 @@ function printFav(fav) {
 // 	const showsItems = document.querySelectorAll('.js-shows-item');
 // 	for (const showsItem of showsItems) {
 // 		if (id === parseInt(showsItem.id)) {
-// 			console.log('deleting');
 // 			showsItem.classList.remove('fav');
 // 		}
 // 	}
@@ -197,7 +248,6 @@ function printFav(fav) {
 
 //  --- LOCAL STORAGE ---
 function storeData() {
-	console.log('guardo');
 	const jsonFavs = JSON.stringify(favs);
 	localStorage.setItem('favs', jsonFavs);
 }
@@ -208,8 +258,9 @@ function getStorage() {
 	if (lastFavs !== null) {
 		favs = lastFavs;
 	}
-	console.log('store' + favs);
 	printFavs();
 }
+
+//  --- REMEMBER FAV SHOWS ---
 
 getStorage();

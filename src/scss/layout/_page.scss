@@ -1,6 +1,5 @@
 body {
 	font-family: 'Roboto', sans-serif;
-	background-color: lightsalmon;
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -16,7 +15,7 @@ body {
 
 .main {
 	width: 75%;
-	background-color: darkorange;
+
 	.fetch-error {
 		position: relative;
 		left: 25%;
