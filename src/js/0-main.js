@@ -17,7 +17,7 @@ let shows = [];
 //  --- API FETCH ---
 function searchShows() {
 	event.preventDefault();
-	fetch(`http://api.tvmaze.com/search/shows?q=${searchText.value}`, {
+	fetch(`https://api.tvmaze.com/search/shows?q=${searchText.value}`, {
 		method: 'GET',
 	})
 		.then(function (resp) {
