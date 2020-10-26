@@ -1,11 +1,14 @@
 .side {
-	width: 25%;
-	height: calc(100vh - 78.4px);
+	width: 100%;
+	min-width: inherit;
 	background-color: ivory;
-
+	@media all and (min-width: 768px) {
+		min-height: calc(100vh - 78.4px);
+		width: 25%;
+	}
 	&__search {
 		text-align: center;
-		padding: 20px 20px;
+		padding: 20px 5%;
 
 		&--title {
 			color: midnightblue;
@@ -13,7 +16,7 @@
 			margin-bottom: 5px;
 		}
 		&--text {
-			width: 70%;
+			width: 60%;
 			background-color: lightsteelblue;
 			border: none;
 			padding: 5px 10px;
@@ -30,6 +33,39 @@
 			padding: 5px 10px;
 			margin-left: -5px;
 			border-radius: 0 10px 10px 0;
+		}
+	}
+
+	.favTitle {
+		text-align: center;
+		color: midnightblue;
+		font-size: 1.4rem;
+		margin-bottom: 10px;
+	}
+
+	&__favs {
+		padding: 0 5%;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+
+		&--list {
+			background-color: white;
+			text-align: center;
+			padding: 10px;
+			border: 3px solid goldenrod;
+			border-radius: 10px;
+			margin-bottom: 10px;
+			margin-left: 10px;
+			color: goldenrod;
+
+			&-item {
+				max-width: 135px;
+			}
+
+			.fav-name {
+				padding: 4px;
+			}
 		}
 	}
 }
