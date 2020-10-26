@@ -160,12 +160,12 @@ function printFav(fav) {
 //  --- PAINT SELECTED ---
 
 function selected() {
-	let index;
-	let i;
-	for (index = 0; index < favs.length; index++) {
-		for (i = 0; i < shows.length; i++) {
-			if (favs[index].show.id === shows[i].show.id) {
-				showListItems[i].classList.add('fav');
+	let indexFav;
+	let indexShow;
+	for (indexFav = 0; indexFav < favs.length; indexFav++) {
+		for (indexShow = 0; indexShow < shows.length; indexShow++) {
+			if (favs[indexFav].show.id === shows[indexShow].show.id) {
+				showListItems[indexShow].classList.add('fav');
 			}
 		}
 	}
